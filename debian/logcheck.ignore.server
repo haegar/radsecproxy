@@ -1,0 +1,3 @@
+^\w{3} [ :[:digit:]]{11} [._[:alnum:]-]+ radsecproxy\[[[:digit:]]+\]: (Accounting-Response|Access-(Accept|Reject)) for user [@._[:alnum:]-]+ (stationid [.:[:xdigit:]-]+ )?from [._[:alnum:]-]+( \([[:print:]]+\))? to [._[:alnum:]-]+ \([.:[:xdigit:]]+\)$
+^\w{3} [ :[:digit:]]{11} [._[:alnum:]-]+ radsecproxy\[[[:digit:]]+\]: Access-Accept \(response to Status-Server\) from [._[:alnum:]-]+ to [._[:alnum:]-]+ \([.:[:xdigit:]]+\)$
+^\w{3} [ :[:digit:]]{11} [._[:alnum:]-]+ radsecproxy\[[[:digit:]]+\]: replyh: got status server response from [._[:alnum:]-]+$

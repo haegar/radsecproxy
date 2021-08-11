@@ -1,0 +1,12 @@
+radsecproxy (1.7.2-1) unstable; urgency=medium
+
+  To improve the overall security of the system, radsecproxy is now running
+  with reduced privileges and as a dedicated system user "radsecproxy" instead
+  of running as root.
+  
+  This may require configuration changes in order for radsecproxy to be able
+  to continue accessing its configuration file and configured certificates and
+  private keys, as well as to be able to write to potentially configured log
+  file destinations.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Tue, 08 Jan 2019 02:10:59 +0200

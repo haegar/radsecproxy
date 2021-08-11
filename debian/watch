@@ -1,0 +1,2 @@
+version=4
+opts=uversionmangle=s/-(alpha|beta|rc[\d])/~$1/,pgpsigurlmangle=s/$/.asc/ https://github.com/radsecproxy/radsecproxy/releases/ download/(?:.+)/radsecproxy-(.+)\.tar\.[gx]z

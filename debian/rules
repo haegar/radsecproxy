@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+#export DH_VERBOSE=1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/buildflags.mk
+
+# Only warn on deprecated declerations for the OpenSSL3.0 transition
+# until https://github.com/radsecproxy/radsecproxy/issues/70
+# has been fixed upstream.
+CFLAGS += -Wno-error=deprecated-declarations
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	dh_auto_install
+	# remove useless/sparsely used binary
+	rm -f debian/radsecproxy/usr/bin/radsecproxy-conf
+	# while they don't need root, they're not really users' material
+	mv -n debian/radsecproxy/usr/bin/* debian/radsecproxy/usr/sbin/
+	rmdir --ignore-fail-on-non-empty debian/radsecproxy/usr/bin
+	# remove the example config with the wrong filename
+	# and install a prepared config that works by default
+	rm -f debian/radsecproxy/etc/radsecproxy.conf-example
+	cp debian/radsecproxy.conf debian/radsecproxy/etc/radsecproxy.conf

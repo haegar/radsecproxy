@@ -1,0 +1,249 @@
+radsecproxy (1.9.0-1~exp1~sdinetI1) buster-backports; urgency=medium
+
+  * Non-maintainer upload.
+  * Buster backport from experimental
+  * Build-Depends:
+    debhelper-compat (= 12)
+    gcc (>= 4:8)
+
+ -- Sven-Haegar Koch <haegar@sdinet.de>  Mon, 09 Aug 2021 17:18:31 +0200
+
+radsecproxy (1.9.0-1~exp1) experimental; urgency=medium
+
+  * New upstream version 1.9.0
+  * Fix dyndisc example scripts input validation (CVE-2021-32642)
+
+ -- Sven Hartge <sven@svenhartge.de>  Fri, 28 May 2021 09:31:27 +0200
+
+radsecproxy (1.9.0~rc1-1~exp1) experimental; urgency=medium
+
+  * New upstream version 1.9.0-rc1
+  * Add gbp.conf for experimental branch
+  * Remove patches applied upstream
+
+ -- Sven Hartge <sven@svenhartge.de>  Sat, 15 May 2021 16:23:38 +0200
+
+radsecproxy (1.8.2-4~exp1) experimental; urgency=medium
+
+  * Fix building with GCC-11 (Closes: #984314)
+  * update branch in CI config
+  * temporarily force GCC 11 for experimental
+
+ -- Sven Hartge <sven@svenhartge.de>  Thu, 04 Mar 2021 08:45:10 +0100
+
+radsecproxy (1.8.2-3) unstable; urgency=medium
+
+  * Remove override for no longer existing lintian tag.
+  * debian/copyright: use spaces rather than tabs to start continuation
+    lines.
+  * Set upstream metadata fields: Bug-Submit.
+  * Remove obsolete field Name from debian/upstream/metadata
+    (already present in machine-readable debian/copyright).
+  * Bump Standards-Version to 4.5.1, no changes needed.
+  * Update watch file format version to 4.
+
+ -- Sven Hartge <sven@svenhartge.de>  Mon, 23 Nov 2020 12:09:13 +0100
+
+radsecproxy (1.8.2-2) unstable; urgency=medium
+
+  * Only warn on deprecated declerations for the OpenSSL3.0 transition
+    until https://github.com/radsecproxy/radsecproxy/issues/70
+    has been fixed upstream.
+
+ -- Sven Hartge <sven@svenhartge.de>  Wed, 19 Aug 2020 14:20:12 +0200
+
+radsecproxy (1.8.2-1) unstable; urgency=medium
+
+  * New upstream version 1.8.2
+  * Upgrade debhelper compat level to 13.
+  * Remove patches applied upstream
+  * Move man-pages for radsecproxy[-hash] into section 8 to be compliant
+    with the FHS.
+  * Add lintian override for testsuite-autopkgtest-missing.
+
+ -- Sven Hartge <sven@svenhartge.de>  Tue, 11 Aug 2020 14:24:31 +0200
+
+radsecproxy (1.8.1-2) unstable; urgency=medium
+
+  * Add patch from Robert Scheck <robert@fedoraproject.org>,
+    fixing incompatibilities with GCC-10.
+    Sourced from https://github.com/radsecproxy/radsecproxy/issues/63
+  * Bump Standards-Version to 4.5.0, no changes needed.
+
+ -- Sven Hartge <sven@svenhartge.de>  Thu, 02 Jul 2020 16:46:14 +0200
+
+radsecproxy (1.8.1-1) unstable; urgency=medium
+
+  * New upstream version 1.8.1.
+    - Removed all patches, applied upstream.
+    - Add patch fixing a simple spelling error.
+  * Add Salsa CI.
+  * Add logcheck rules to filter out normal messages.
+  * Add Upstream metadata.
+  * Bump Standards-Version to 4.4.1, no changes needed.
+  * Add Rules-Requires-Root: no to debian/control.
+    Build does not require root privileges.
+
+ -- Sven Hartge <sven@svenhartge.de>  Wed, 02 Oct 2019 17:28:17 +0200
+
+radsecproxy (1.8.0-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Backport an upstream patch to fix FTBFS on 32-bit.
+    - Include an upstream patch to add a missing header include.
+    - Include an upstream patch to fix a couple of manpage formatting errors.
+  * Add Pre-Depends: ${misc:Pre-Depends}, since we are (implicitly) using
+    invoke-rc.d's --skip-systemd-native. Recommended by lintian.
+  * Bump Standards-Version to 4.4.0, no changes needed.
+  * Bump debhelper compat level to 12.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Wed, 04 Sep 2019 17:12:29 +0300
+
+radsecproxy (1.7.2-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Bump Build-Depends to OpenSSL 1.1.0 (libssl-dev), as the new upstream
+    version is now compatible with it. (Closes: #859675)
+  * Remove --enable-fticks from configure, as it's now default and
+    non-optional.
+  * Update the shipped /etc/radsecproxy.conf with new (commented out) upstream
+    directives.
+  * Use a dedicated "radsecproxy" user to run the daemon instead of root.
+    (Closes: #872888)
+  * Remove dependency on docbook2x since this version ships the pregenerated
+    manpages by default. These are now the preferred source of modification
+    upstream, and the XMLs were removed entirely in a subsequent commit. Also
+    adjust our path-correction patch to patch the manpages directly.
+  * Update debian/upstream/signing-key.asc with the new upstream's key.
+  * Update debian/control, debian/copyright and debian/watch with the
+    project's new homepage on GitHub.
+  * Update debian/copyright with an additional copyright author (SWITCH) and
+    to reflect the license change, i.e. to remove GPLv2+ and update to a
+    generic 3-clause BSD.
+  * Add Vcs-* to point to the package's git at salsa.debian.org.
+  * Bump debhelper compat to 11.
+  * Bump Standards-Version to 4.3.0.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Tue, 08 Jan 2019 03:16:13 +0200
+
+radsecproxy (1.6.9-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Bump debhelper compatibility level to 10.
+    - Drop dh-systemd build-dependency and the equivalent --with argument.
+    - Drop dh-autoreconf build-dependency and the equivalent --with argument.
+    - Drop autotools-dev build-dependency.
+  * Drop versioned dependency on lsb-base, as it's satisfied by even very old
+    Debian releases.
+  * Add ProtectSystem, PrivateDevices, PrivateTmp, ProtectHome options to the
+    systemd unit for increased security.
+  * Bump Standards-Version to 4.0.0.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Fri, 04 Aug 2017 22:12:40 +0300
+
+radsecproxy (1.6.8-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Build against OpenSSL 1.0, as 1.6 series isn't compatible with OpenSSL 1.1.
+    (Closes: #828527)
+  * Bump Standards-Version to 3.9.8, no changes needed.
+  * Depend on lsb-base for /lib/lsb/init-functions.
+  * Add hardening build flags (hardening=+all).
+
+ -- Faidon Liambotis <paravoid@debian.org>  Fri, 16 Dec 2016 15:59:31 +0200
+
+radsecproxy (1.6.7-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Point Homepage and debian/watch to the new website.
+  * Bump Standards-Version to 3.9.7, no changes needed.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Wed, 23 Mar 2016 02:02:13 +0200
+
+radsecproxy (1.6.5-1) unstable; urgency=medium
+
+  * New upstream release.
+  * Bump Standards-Version to 3.9.6.
+  * Verify upstream's GPG signatures; add debian/upstream/signing-key.asc and
+    modify debian/watch accordingly.
+  * Minor adjustment to the long description. (Closes: #542454)
+  * Add --retry to --stop to fix spurious restart issue. Thanks to Michael
+    Vogt for the fix. (Closes: #711313)
+  * Add build dependency on dh-autoreconf and autoreconf during build time, as
+    it helps when adding new architectures to the archive. (Closes: #727952,
+    #744500)
+  * Add systemd unit file, along with the corresponding dh-systemd
+    integration.
+  * Switch pid file from /var/run to /run on both init script & systemd unit.
+  * Rewrite debian/copyright to the machine-parseable format.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Wed, 22 Oct 2014 23:50:56 +0300
+
+radsecproxy (1.6.2-1) unstable; urgency=high
+
+  * Urgency set to high for a security release.
+  * New upstream release, fixing two security issues:
+    - When verifying clients, don't consider config blocks with CA settings
+      ('tls') which differ from the one used for verifying the certificate
+      chain (RADSECPROXY-43, CVE-2012-4523). Reported by Ralf Paffrath.
+    - Fix the issue with verification of clients when using multiple 'tls'
+      config blocks for DTLS too (RADSECPROXY-43, CVE-2012-4566). Reported by
+      Raphael Geissert.
+  * Drop most of debian/patches/fix_manpages, merged upstream.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Tue, 06 Nov 2012 12:56:27 +0200
+
+radsecproxy (1.6-1) unstable; urgency=low
+
+  * New upstream release.
+  * Enable F-Ticks, a new upstream feature.
+    - Add build dependency on nettle-dev.
+  * Ship upstream's manpages.
+    - Add build dependency on docbook2x.
+    - Add debian/patches/fix_manpages to adapt the manpage to our filepaths.
+  * Ship the radsecproxy-hash binary, used to calculate hashed CSI values.
+  * Use unapply-patches & abort-on-upstream-changes local-options.
+  * Bump debhelper compat to 9, mainly to enable hardening flags.
+  * Bump Standards-Version to 3.9.3, no changes needed.
+  * Add NORDUnet A/S copyright notice to debian/copyright.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Mon, 28 May 2012 15:56:52 +0300
+
+radsecproxy (1.5-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Wed, 16 Nov 2011 20:49:19 +0200
+
+radsecproxy (1.4.3-1) unstable; urgency=low
+
+  * New upstream release.
+  * Change upstream author to Linus Nordberg in debian/copyright.
+  * Switch to 3.0 (quilt) source package format.
+  * Bump debhelper compatibility level to 8.
+  * Update Standards-Version to 3.9.2, no changes needed.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Fri, 22 Jul 2011 20:04:47 +0300
+
+radsecproxy (1.4-1) unstable; urgency=low
+
+  * New upstream release.
+  * Add $remote_fs and $syslog to init script's Required-Start and $named to
+    Should-Start.
+  * Ship naptr-eduroam.sh script along with the README in examples.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Sat, 12 Jun 2010 18:30:04 +0300
+
+radsecproxy (1.3.1-1) unstable; urgency=low
+
+  * New upstream release.
+  * Bump Standards-Version to 3.8.2, no changed needed.
+  * Build-Depend on debhelper >= 7.0.50 because of the use of overrides in dh.
+
+ -- Faidon Liambotis <paravoid@debian.org>  Wed, 05 Aug 2009 12:49:20 +0300
+
+radsecproxy (1.3-1) unstable; urgency=low
+
+  * Initial release. (Closes: #532481)
+
+ -- Faidon Liambotis <paravoid@debian.org>  Tue, 16 Jun 2009 05:13:48 +0300

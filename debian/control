@@ -1,0 +1,28 @@
+Source: radsecproxy
+Section: net
+Priority: optional
+Maintainer: Faidon Liambotis <paravoid@debian.org>
+Uploaders: Sven Hartge <sven@svenhartge.de>
+Build-Depends:
+ debhelper-compat (= 12),
+ gcc (>= 4:8),
+ libssl-dev,
+ nettle-dev
+Standards-Version: 4.5.1
+Rules-Requires-Root: no
+Homepage: https://radsecproxy.github.io/
+Vcs-Browser: https://salsa.debian.org/debian/radsecproxy
+Vcs-Git: https://salsa.debian.org/debian/radsecproxy.git
+
+Package: radsecproxy
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, lsb-base, adduser
+Pre-Depends: ${misc:Pre-Depends}
+Provides: radius-server
+Description: RADIUS protocol proxy supporting RadSec
+ radsecproxy is a generic RADIUS proxy that in addition to usual RADIUS UDP
+ transport also supports TLS (RadSec). It aims to be flexible while at the same
+ time small in size and memory footprint, efficient and easy to configure.
+ .
+ It can be useful as a proxy on site boundaries or in other complex RADIUS
+ routing topologies. It supports both IPv4 and IPv6.
