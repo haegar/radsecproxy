@@ -1,4 +1,4 @@
-radsecproxy (1.9.0+git20210811+acctfix+sdinetJ3) bullseye; urgency=medium
+radsecproxy (1.9.0+git20210811+acctfix+sdinetK3) unstable; urgency=medium
 
   * Non-maintainer upload.
   * New git snapshot plus accounting packet Message-Authenticator fix
