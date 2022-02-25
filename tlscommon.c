@@ -390,8 +390,10 @@ static SSL_CTX *tlscreatectx(uint8_t type, struct tls *conf) {
 #if OPENSSL_VERSION_NUMBER >= 0x10100000
         /* TLS_method() was introduced in OpenSSL 1.1.0. */
         ctx = SSL_CTX_new(TLS_method());
-        SSL_CTX_set_min_proto_version(ctx, conf->tlsminversion);
-        SSL_CTX_set_max_proto_version(ctx, conf->tlsmaxversion);
+        if (conf->tlsminversion >= 0)
+            SSL_CTX_set_min_proto_version(ctx, conf->tlsminversion);
+        if (conf->tlsmaxversion >= 0)
+            SSL_CTX_set_max_proto_version(ctx, conf->tlsmaxversion);
 #else
         /* No TLS_method(), use SSLv23_method() and disable SSLv2 and SSLv3. */
         ctx = SSL_CTX_new(SSLv23_method());
@@ -408,8 +410,10 @@ static SSL_CTX *tlscreatectx(uint8_t type, struct tls *conf) {
         /* DTLS_method() seems to have been introduced in OpenSSL 1.0.2. */
         ctx = SSL_CTX_new(DTLS_method());
 #if OPENSSL_VERSION_NUMBER >= 0x10100000
-        SSL_CTX_set_min_proto_version(ctx, conf->dtlsminversion);
-        SSL_CTX_set_max_proto_version(ctx, conf->dtlsmaxversion);
+        if (conf->dtlsminversion >= 0)
+            SSL_CTX_set_min_proto_version(ctx, conf->dtlsminversion);
+        if (conf->dtlsmaxversion >= 0)
+            SSL_CTX_set_max_proto_version(ctx, conf->dtlsmaxversion);
 #endif
 #else
         ctx = SSL_CTX_new(DTLSv1_method());
@@ -492,12 +496,26 @@ static SSL_CTX *tlscreatectx(uint8_t type, struct tls *conf) {
 #endif
 
     if (conf->dhparam) {
+#if OPENSSL_VERSION_NUMBER >= 0x30000000
+        if (!SSL_CTX_set0_tmp_dh_pkey(ctx, conf->dhparam)) {
+#else
         if (!SSL_CTX_set_tmp_dh(ctx, conf->dhparam)) {
+#endif
             while ((error = ERR_get_error()))
                 debug(DBG_WARN, "tlscreatectx: SSL: %s", ERR_error_string(error, NULL));
             debug(DBG_WARN, "tlscreatectx: Failed to set dh params. Can continue, but some ciphers might not be available.");
         }
     }
+#if OPENSSL_VERSION_NUMBER >= 0x10101000
+    else {
+        if (!SSL_CTX_set_dh_auto(ctx, 1)) {
+            while ((error = ERR_get_error()))
+                debug(DBG_WARN, "tlscreatectx: SSL: %s", ERR_error_string(error, NULL));
+            debug(DBG_WARN, "tlscreatectx: Failed to set automatic dh params. Can continue, but some ciphers might not be available.");
+        }
+    }
+#endif
+
     debug(DBG_DBG, "tlscreatectx: created TLS context %s", conf->name);
     return ctx;
 }
@@ -905,7 +923,8 @@ int conftls_cb(struct gconffile **cf, void *arg, char *block, char *opt, char *v
 	conf->cacheexpiry = expiry;
     }
 #if OPENSSL_VERSION_NUMBER >= 0x10100000
-    conf->tlsminversion = TLS1_1_VERSION;
+    /* use -1 as 'not set' value */
+    conf->tlsminversion = conf->tlsmaxversion = conf->dtlsminversion = conf->dtlsmaxversion = -1;
     if (tlsversion) {
         if(!conf_tls_version(tlsversion, &conf->tlsminversion, &conf->tlsmaxversion)) {
             debug(DBG_ERR, "error in block %s, invalid TlsVersion %s", val, tlsversion);
@@ -930,6 +949,20 @@ int conftls_cb(struct gconffile **cf, void *arg, char *block, char *opt, char *v
 #endif
 
     if (dhfile) {
+#if OPENSSL_VERSION_NUMBER >= 0x30000000
+        BIO *bio = BIO_new_file(dhfile, "r");
+        if (bio) {
+            conf->dhparam = EVP_PKEY_new();
+            if (!PEM_read_bio_Parameters(bio, &conf->dhparam)) {
+                BIO_free(bio);
+                while ((error = ERR_get_error()))
+                    debug(DBG_ERR, "SSL: %s", ERR_error_string(error, NULL));
+                debug(DBG_ERR, "error in block %s: Failed to load DhFile %s.", val, dhfile);
+                goto errexit;
+            }
+            BIO_free(bio);
+        }
+#else
         FILE *dhfp = fopen(dhfile, "r");
         if (dhfp) {
             conf->dhparam = PEM_read_DHparams(dhfp, NULL, NULL, NULL);
@@ -946,6 +979,7 @@ int conftls_cb(struct gconffile **cf, void *arg, char *block, char *opt, char *v
         }
         free(dhfile);
         dhfile = NULL;
+#endif
     }
 
     conf->name = stringcopy(val, 0);
@@ -976,7 +1010,11 @@ errexit:
     free(tlsversion);
     free(dtlsversion);
     free(dhfile);
+#if OPENSSL_VERSION_NUMBER >= 0x30000000
+    EVP_PKEY_free(conf->dhparam);
+#else
     DH_free(conf->dhparam);
+#endif
     free(conf);
     return 0;
 }

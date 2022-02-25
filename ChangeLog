@@ -1,6 +1,6 @@
-unreleased changes
+2021-10-25 1.9.1
 	Misc:
-	- Don't require server type to be set by dyndisc scripts
+	- OpenSSL 3.0 compatibility (#70)
 	
 	Bug Fixes:
 	- Fix refused startup with openssl <1.1 (#82)
@@ -9,6 +9,7 @@ unreleased changes
 	- Fix lazy certificate check when connecting to TLS servers
 	- Fix connect is aborted if first host in list has invalid certificate
 	- Fix setstacksize for glibc 2.34 (#91)
+	- Fix system defaults/settings for TLS version not honored (#92)
 
 2021-05-28 1.9.0
 	New features:
